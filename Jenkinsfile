@@ -8,6 +8,7 @@ pipeline {
         stage("Code_Fetch"){
             steps{
             git branch: 'main',
+            credentialsId: 'github',
             url: 'https://github.com/bcamishrapr/python-app.git'
         }
         
