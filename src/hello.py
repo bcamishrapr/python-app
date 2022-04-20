@@ -5,4 +5,4 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return 'This is sample application running on Flask! ADDING KUBERNETES DEPLOYMENT'
+    return 'This is sample application running on Flask! ADDING KUBERNETES '
