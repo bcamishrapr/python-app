@@ -8,6 +8,7 @@ COPY src/requirements.txt ./
 
 RUN pip install -r requirements.txt
 
+
 COPY src /app
 
 EXPOSE 8080
