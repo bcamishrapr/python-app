@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent { 
+        node {
+        label 'kube'
+        }
+    }
     stages {
         stage("Code_Fetch"){
             steps{
