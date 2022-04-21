@@ -39,14 +39,19 @@ pipeline {
         }
         stage("Kubernetes Deployment") {
             steps{
+                script {
                 //sh "kubectl delete deploy python-deploy"
                 //sh "kubectl create deploy python-deploy --image=prasoonm/python-docker-flask"
                 sh "kubectl apply -f kube-deploy.yaml"
-                script {
+                PY_POD = sh (script: "kubectl get po -l app=python-deploy|awk '{print \$1}'|tail -n 1",returnStdout: true).trim()
+                   sh "kubectl delete po $PY_POD"
+                   sh "sleep 10&&kubectl get po -l app=python-deploy" 
+                //script {
                 KUBE_SVC = sh (script: "kubectl get svc python-deploy|awk '{print \$1}'|tail -n1",returnStdout: true).trim()
                 
                 if (KUBE_SVC == "python-deploy"){
                     echo "Service Already Present"
+                    sh "kubectl get svc"
                 }
                 else {
                     //sh "kubectl expose deploy python-deploy --port=5000 --target-port=5000 --type=NodePort"
