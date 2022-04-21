@@ -33,7 +33,7 @@ pipeline {
                 DOCKER_HUB_CRED = credentials('DOCKER_CRED')
             }
             steps{
-                sh "docker login -u prasoonm -p $DOCKER_HUB_CRED_PSW"
+                sh 'docker login -u prasoonm -p $DOCKER_HUB_CRED_PSW'
                 sh "docker push $dockerImage"
             }
         }
