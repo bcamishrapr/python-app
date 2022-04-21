@@ -33,7 +33,7 @@ pipeline {
                 DOCKER_HUB_CRED = credentials('DOCKER_CRED')
             }
             steps{
-                sh 'docker login -u prasoonm -p $DOCKER_HUB_CRED_PSW'
+                //sh 'docker login -u prasoonm -p $DOCKER_HUB_CRED_PSW'
                 sh "docker push $dockerImage"
             }
         }
@@ -46,7 +46,7 @@ pipeline {
                 PY_POD = sh (script: "kubectl get po -l app=python-deploy|awk '{print \$1}'|tail -n 1",returnStdout: true).trim()
                    sh "kubectl delete po $PY_POD --force"
                    sh "sleep 10&&kubectl get po -l app=python-deploy" 
-                //script {
+                
                 KUBE_SVC = sh (script: "kubectl get svc python-deploy|awk '{print \$1}'|tail -n1",returnStdout: true).trim()
                 
                 if (KUBE_SVC == "python-deploy"){
