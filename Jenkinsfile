@@ -20,9 +20,10 @@ pipeline {
                 sh "docker image list|head -n2"
                 //sh "docker push prasoonm/python-docker-flask"
             }
-        }
+        
        withCredentials([string(credentialsId: 'DOCKER_HUB_CRED', variable: 'PASSWORD')]) {
         sh 'docker login -u prasoonm -p $PASSWORD'
+        }
         }
         stage("Push Image to Docker-Hub") {
             steps{
