@@ -44,7 +44,7 @@ pipeline {
                 //sh "kubectl create deploy python-deploy --image=prasoonm/python-docker-flask"
                 sh "kubectl apply -f kube-deploy.yaml"
                 PY_POD = sh (script: "kubectl get po -l app=python-deploy|awk '{print \$1}'|tail -n 1",returnStdout: true).trim()
-                   sh "kubectl delete po $PY_POD --force"
+                   sh "kubectl delete po $PY_POD --force --grace-period=0"
                    sh "sleep 10&&kubectl get po -l app=python-deploy" 
                 
                 KUBE_SVC = sh (script: "kubectl get svc python-deploy|awk '{print \$1}'|tail -n1",returnStdout: true).trim()
