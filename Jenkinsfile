@@ -21,7 +21,7 @@ pipeline {
         stage("Docker Build") {
             steps{
                 sh "docker build -t python-docker-dev ."
-                sh "docker tag python-docker-dev prasoonm/python-docker-flask"
+                sh "docker tag python-docker-dev $dockerImage"
                 sh "docker image list|head -n2"
                 //sh "docker push $dockerImage"
              
