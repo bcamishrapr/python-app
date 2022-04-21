@@ -25,11 +25,15 @@ pipeline {
                 sh "docker image list|head -n2"
                 //sh "docker push $dockerImage"
              
-               sh "docker login -u prasoonm -p $DOCKERHUB_CRED"
+               //sh "docker login -u prasoonm -p $DOCKERHUB_CRED"
         }
         }
         stage("Push Image to Docker-Hub") {
+            environment {
+                DOCKER_HUB_CRED = credentials('DOCKER_CRED')
+            }
             steps{
+                sh "docker login -u prasoonm -p $DOCKER_HUB_CRED_PSW"
                 sh "docker push $dockerImage"
             }
         }
