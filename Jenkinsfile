@@ -35,9 +35,9 @@ pipeline {
         }
         stage("Kubernetes Deployment") {
             steps{
-                sh "kubectl delete deploy python-deploy"
-                sh "kubectl create deploy python-deploy --image=prasoonm/python-docker-flask"
-                //sh "kubectl set image deployments/python-deploy "
+                //sh "kubectl delete deploy python-deploy"
+                //sh "kubectl create deploy python-deploy --image=prasoonm/python-docker-flask"
+                sh "kubectl apply -f kube-deploy.yaml"
                 script {
                 KUBE_SVC = sh (script: "kubectl get svc python-deploy|awk '{print \$1}'|tail -n1",returnStdout: true).trim()
                 
@@ -45,7 +45,8 @@ pipeline {
                     echo "Service Already Present"
                 }
                 else {
-                    sh "kubectl expose deploy python-deploy --port=5000 --target-port=5000 --type=NodePort"
+                    //sh "kubectl expose deploy python-deploy --port=5000 --target-port=5000 --type=NodePort"
+                    sh "kubectl apply -f kube-svc.yaml"
                 }
                   NODE_IP = sh (script: "hostname --all-ip-addresses|awk '{print\$2}'",returnStdout: true).trim()
                   NODE_PORT = sh (script: "kubectl get svc python-deploy |awk '{print \$5}'|tail -n 1|cut -d : -f2|rev|sed 's|.*/||'|rev",returnStdout: true).trim()
