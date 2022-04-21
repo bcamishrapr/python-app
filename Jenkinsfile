@@ -17,6 +17,11 @@ pipeline {
             steps{
                 sh "docker build -t python-docker-dev ."
                 sh "docker tag python-docker-dev prasoonm/python-docker-flask"
+                //sh "docker push prasoonm/python-docker-flask"
+            }
+        }
+        stage("Push Image to Docker-Hub") {
+            steps{
                 sh "docker push prasoonm/python-docker-flask"
             }
         }
