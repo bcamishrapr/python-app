@@ -1,7 +1,7 @@
 pipeline {
     environment { 
-        registry = "YourDockerhubAccount/YourRepository" 
-        registryCredential = 'DOCKERHUB_CRED'
+        registry = "prasoonm/python-docker-flask" 
+        registryCredential = 'DOCKER_CRED'
         dockerImage = "prasoonm/python-docker-flask"
     }
     agent { 
@@ -24,7 +24,9 @@ pipeline {
                 //sh "docker tag python-docker-dev $dockerImage"
                 //sh "docker image list|head -n2"
                 
-                app = docker.build("prasoonm/python-docker-flask")
+                script { 
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                }
                
         }
         }
@@ -34,10 +36,11 @@ pipeline {
             }
             steps{
                 
-                docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_CRED') {
-                app.push("${env.BUILD_NUMBER}")
-                app.push("latest")
-        }
+             script { 
+                    docker.withRegistry( '', registryCredential ) { 
+                        dockerImage.push() 
+                   }
+                } 
                 //sh 'docker login -u prasoonm -p $DOCKER_HUB_CRED_PSW'
                 //sh "docker push $dockerImage"
             }
