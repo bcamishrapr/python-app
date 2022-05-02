@@ -53,7 +53,10 @@ pipeline {
                 script {
                     
                 //sh "kubectl apply -f kube-deploy.yaml"
-                sh "kubectl set image deployment/python-deploy python-docker-flask=$registry:$BUILD_NUMBER"   
+                    
+                sed s/%IMG_NAME%/$dockerImage/g  kube-deploy.yaml >  kube-deploy1.yaml 
+                sh "kubectl apply -f kube-deploy1.yaml"    
+                //sh "kubectl set image deployment/python-deploy python-docker-flask=$registry:$BUILD_NUMBER"   
                     
                // PY_POD = sh (script: "kubectl get po -l app=python-deploy|awk '{print \$1}'|tail -n 1",returnStdout: true).trim()
                // sh "kubectl delete po $PY_POD --force --grace-period=0"
