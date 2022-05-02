@@ -43,6 +43,11 @@ pipeline {
                 //sh "docker push $dockerImage"
             }
         }
+        stage('Cleaning up Docker Image From Local Machine') { 
+            steps { 
+                sh "docker rmi $registry:$BUILD_NUMBER" 
+            }
+        } 
         stage("Kubernetes Deployment") {
             steps{
                 script {
