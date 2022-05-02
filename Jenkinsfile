@@ -20,14 +20,12 @@ pipeline {
         }
         stage("Docker Build") {
             steps{
-                //sh "docker build -t python-docker-dev ."
-                //sh "docker tag python-docker-dev $dockerImage"
-                //sh "docker image list|head -n2"
-                
+                //sh "docker build -t $dockerImage ."
+                //sh "docker tag  $dockerImage" $dockerImage
+                sh "docker image list|head -n2"
                 script { 
                     dockerImage = docker.build registry + ":$BUILD_NUMBER"
                 }
-               
         }
         }
         stage("Push Image to Docker-Hub") {
@@ -48,12 +46,14 @@ pipeline {
         stage("Kubernetes Deployment") {
             steps{
                 script {
-                //sh "kubectl delete deploy python-deploy"
-                //sh "kubectl create deploy python-deploy --image=prasoonm/python-docker-flask"
-                sh "kubectl apply -f kube-deploy.yaml"
-                PY_POD = sh (script: "kubectl get po -l app=python-deploy|awk '{print \$1}'|tail -n 1",returnStdout: true).trim()
-                   sh "kubectl delete po $PY_POD --force --grace-period=0"
-                   sh "sleep 10&&kubectl get po -l app=python-deploy" 
+                    
+                //sh "kubectl apply -f kube-deploy.yaml"
+                sh "kubectl set image deployment/python-deploy python-docker-flask=$registry:$BUILD_NUMBER"   
+                    
+               // PY_POD = sh (script: "kubectl get po -l app=python-deploy|awk '{print \$1}'|tail -n 1",returnStdout: true).trim()
+               // sh "kubectl delete po $PY_POD --force --grace-period=0"
+                    
+                 sh "sleep 15&&kubectl get po -l app=python-deploy" 
                 
                 KUBE_SVC = sh (script: "kubectl get svc python-deploy|awk '{print \$1}'|tail -n1",returnStdout: true).trim()
                 
