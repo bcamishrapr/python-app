@@ -20,12 +20,12 @@ pipeline {
         }
         stage("Docker Build") {
             steps{
-                sh "docker build -t python-docker-dev ."
-                sh "docker tag python-docker-dev $dockerImage"
-                sh "docker image list|head -n2"
-                //sh "docker push $dockerImage"
-             
-               //sh "docker login -u prasoonm -p $DOCKERHUB_CRED"
+                //sh "docker build -t python-docker-dev ."
+                //sh "docker tag python-docker-dev $dockerImage"
+                //sh "docker image list|head -n2"
+                
+                app = docker.build("prasoonm/python-docker-flask")
+               
         }
         }
         stage("Push Image to Docker-Hub") {
@@ -33,8 +33,13 @@ pipeline {
                 DOCKER_HUB_CRED = credentials('DOCKER_CRED')
             }
             steps{
+                
+                docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_CRED') {
+                app.push("${env.BUILD_NUMBER}")
+                app.push("latest")
+        }
                 //sh 'docker login -u prasoonm -p $DOCKER_HUB_CRED_PSW'
-                sh "docker push $dockerImage"
+                //sh "docker push $dockerImage"
             }
         }
         stage("Kubernetes Deployment") {
