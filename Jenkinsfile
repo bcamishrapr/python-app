@@ -54,7 +54,7 @@ pipeline {
                     
                 //sh "kubectl apply -f kube-deploy.yaml"
                     
-                sh "sed 's/%IMG_NAME%/$registry\:$BUILD_NUMBER/g'  kube-deploy.yaml >  kube-deploy1.yaml"
+                sh "sed 's/%IMG_NAME%/$registry:$BUILD_NUMBER/g'  kube-deploy.yaml >  kube-deploy1.yaml"
                 sh "kubectl apply -f kube-deploy1.yaml"    
                 //sh "kubectl set image deployment/python-deploy python-docker-flask=$registry:$BUILD_NUMBER"   
                     
