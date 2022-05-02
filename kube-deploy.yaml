@@ -18,5 +18,5 @@ spec:
         app: python-deploy
     spec:
       containers:
-      - image: prasoonm/python-docker-flask
+      - image: %IMG_NAME%
         name: python-docker-flask
