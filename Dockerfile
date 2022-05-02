@@ -2,6 +2,8 @@ FROM python:3.6
 
 MAINTAINER Prasoon Mishra
 
+LABEL Remarks="This is a dockefile for running sample flask app"
+
 WORKDIR /app
 
 ENV FLASK_APP=hello.py
